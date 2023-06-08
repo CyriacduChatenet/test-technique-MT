@@ -1,35 +1,29 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { FC, useEffect, useState } from "react";
 
-function App() {
-  const [count, setCount] = useState(0)
+import { ApiService } from "./setup/services/api.service";
+import { Card as CardType } from "./setup/types/card.type";
+import { Layout } from "./app/components/layout";
+import { Card } from "./app/components/card";
 
+const App: FC = () => {
+  const [data, setData] = useState<CardType[]>([]);
+
+  const handleFetch = async () => {
+    const response = await ApiService.getCard();
+    setData(response);
+    console.log(response);
+  };
+
+  useEffect(() => {
+    handleFetch();
+  }, []);
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <Layout>
+      <div className="grid grid-cols-12 gap-5 mt-8">
+        {data.map((card: CardType) => <Card key={card.id} data={card} color="" />)}
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    </Layout>
+  );
+};
 
-export default App
+export default App;
