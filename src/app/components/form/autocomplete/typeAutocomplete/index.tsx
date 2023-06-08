@@ -5,23 +5,20 @@ import { SearchCredentials } from "../../../../../setup/types/searchCredential.t
 
 interface IProps {
   typeFocus: boolean;
+  typesSelected: string[];
   credentials: SearchCredentials;
   setCredentials: Dispatch<SetStateAction<SearchCredentials>>;
 }
 
-export const TypeAutocomplete: FC<IProps> = ({
-  typeFocus,
-  credentials,
-  setCredentials,
-}) => {
+export const TypeAutocomplete: FC<IProps> = ({ typeFocus, credentials, setCredentials, typesSelected }) => {
   const { types } = useCard();
   return (
-    <div className={`w-1/3`}>
+    <div className={`w-full`}>
       <ul
         className={`${typeFocus ? "visible" : "hidden"} h-36 overflow-scroll`}
       >
         {types
-          .filter((type: string) => type.includes(credentials.type))
+          .filter((type: string) => type.includes(credentials.type) && !typesSelected.includes(type))
           .map((type: string, index: number) => (
             <li
               key={index}

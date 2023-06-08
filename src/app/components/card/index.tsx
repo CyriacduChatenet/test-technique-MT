@@ -20,6 +20,7 @@ export const Card: FC<IProps> = ({ data }) => {
             {data.name}
           </h2>
           <p className="text-gray-700 text-lg my-2">{data.rarity}</p>
+          <p className="text-gray-700 text-lg my-2">{data.type}</p>
           <p className="text-gray-700 text-sm">{data.text}</p>
         </div>
       </div>

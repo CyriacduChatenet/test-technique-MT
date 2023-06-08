@@ -17,7 +17,7 @@ export const SearchForm: FC = () => {
   const [rarityFocus, setRarityFocus] = useState<boolean>(false);
   const [types, setTypes] = useState<string[]>([]);
 
-  const { filteredData, setFilteredData } = useCard();
+  const { filteredData, setFilteredData, data } = useCard();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setCredentials({
@@ -45,6 +45,8 @@ export const SearchForm: FC = () => {
       });
 
       setFilteredData(filtered);
+    } else {
+      setFilteredData(data);
     }
   };
 
@@ -102,6 +104,7 @@ export const SearchForm: FC = () => {
               typeFocus={typeFocus}
               credentials={credentials}
               setCredentials={setCredentials}
+              typesSelected={types}
             />
           </div>
           <div

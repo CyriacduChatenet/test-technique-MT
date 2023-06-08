@@ -12,7 +12,7 @@ interface IProps {
 
 export const RarityAutocomplete: FC<IProps> = ({ credentials, setCredentials, rarityFocus }) => {
   return (
-      <ul className={`w-1/3 ${rarityFocus ? "visible": "hidden"} h-36 overflow-scroll`}>
+      <ul className={`w-full ${rarityFocus ? "visible": "hidden"} h-36 overflow-scroll`}>
         {rarities
           .filter((rarity: Rarity) => rarity.value.includes(credentials.rarity))
           .map((rarity: Rarity, index: number) => (
