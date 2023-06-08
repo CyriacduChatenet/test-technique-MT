@@ -1,7 +1,7 @@
 import { Rarity } from "../types/rarity.type";
 
 export const rarities: Rarity[] = [
-    { value: "Common", color: "#2e2e2e" },
+    { value: "Common", color: "#dedede" },
     { value: "Uncommon", color: "#ababab" },
     { value: "Rare", color: "#ffca00" },
     { value: "Mythic Rare", color: "#ff8600" },
