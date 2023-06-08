@@ -7,7 +7,7 @@ export const Navbar: FC = () => {
         <div className="w-full flex justify-between items-center px-8">
           <div>
             <a href="/" className="text-2xl font-bold hover:text-gray-100">
-              <h1>Logo</h1>
+              <h1>MT</h1>
             </a>
           </div>
           <div className="hidden md:block">
