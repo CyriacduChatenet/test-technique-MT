@@ -1,0 +1,1 @@
+export type SearchCredentials = {type: string, rarity: string, name: string};

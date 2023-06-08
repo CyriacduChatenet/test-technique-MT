@@ -1,20 +1,20 @@
-import { ChangeEvent, FC, useState } from "react";
+import { ChangeEvent, FC, useEffect, useState } from "react";
+
 import { useCard } from "../../../../setup/contexts/card.context";
 import { Card } from "../../../../setup/types/card.type";
 import { RarityAutocomplete } from "../autocomplete/rarityAutocomplete";
+import { TypeAutocomplete } from "../autocomplete/typeAutocomplete";
+import { SearchCredentials } from "../../../../setup/types/searchCredential.type";
 
 export const SearchForm: FC = () => {
-  const [credentials, setCredentials] = useState<{
-    type: string;
-    rarity: string;
-    name: string;
-  }>({
+  const [credentials, setCredentials] = useState<SearchCredentials>({
     type: "",
     rarity: "",
     name: "",
   });
   const [typeFocus, setTypeFocus] = useState<boolean>(false);
   const [rarityFocus, setRarityFocus] = useState<boolean>(false);
+  const [types, setTypes] = useState<string[]>([]);
 
   const { filteredData, setFilteredData } = useCard();
 
@@ -23,22 +23,6 @@ export const SearchForm: FC = () => {
       ...credentials,
       [e.target.name]: e.target.value,
     });
-  };
-
-  const handleTypeFocus = () => {
-    setTypeFocus(true);
-  };
-
-  const handleTypeBlur = () => {
-    setTypeFocus(false);
-  };
-
-  const handleRarityFocus = () => {
-    setRarityFocus(true);
-  };
-
-  const handleRarityBlur = () => {
-    setRarityFocus(false);
   };
 
   const handleSubmit = () => {
@@ -50,8 +34,7 @@ export const SearchForm: FC = () => {
     ) {
       const filtered = filteredData.filter((card: Card) => {
         return (
-          (card.type === credentials.type &&
-            card.rarity === credentials.rarity) ||
+          (types.includes(card.type) && card.rarity === credentials.rarity) ||
           card.name === credentials.name
         );
       });
@@ -60,11 +43,30 @@ export const SearchForm: FC = () => {
     }
   };
 
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setTypes((prev) => [...prev, credentials.type]);
+      setCredentials((prev) => ({
+        ...prev,
+        type: "",
+      }));
+    }, 3000);
+
+    return () => clearTimeout(timeout);
+  }, [credentials.type]);
+
   return (
     <section>
+      <div className="w-full">
+        <ul className="w-1/3 flex justify-between items-center">
+          {types.map((type: string, index: number) => (
+            <li key={index}>{type}</li>
+          ))}
+        </ul>
+      </div>
       <form>
         <div className="flex items-center py-2">
-          <div className="w-1/3">
+          <div className="w-1/3" onMouseEnter={() => setTypeFocus(true)} onMouseLeave={() => setTypeFocus(false)}>
             <label htmlFor="" className="font-bold">
               Type
             </label>
@@ -75,12 +77,15 @@ export const SearchForm: FC = () => {
               placeholder="Search by type"
               aria-label="Search by type"
               onChange={handleChange}
-              onFocus={handleTypeFocus}
-              onBlur={handleTypeBlur}
               value={credentials.type}
             />
+            <TypeAutocomplete
+              typeFocus={typeFocus}
+              credentials={credentials}
+              setCredentials={setCredentials}
+            />
           </div>
-          <div className="w-1/3">
+          <div className="w-1/3" onMouseEnter={() => setRarityFocus(true)} onMouseLeave={() => setRarityFocus(false)}>
             <label htmlFor="" className="font-bold">
               Rarity
             </label>
@@ -91,9 +96,12 @@ export const SearchForm: FC = () => {
               placeholder="Search by rarity"
               aria-label="Search by rarity"
               onChange={handleChange}
-              onFocus={handleRarityFocus}
-              onBlur={handleRarityBlur}
               value={credentials.rarity}
+            />
+            <RarityAutocomplete
+              credentials={credentials}
+              setCredentials={setCredentials}
+              rarityFocus={rarityFocus}
             />
           </div>
           <div className="w-1/3">
@@ -119,19 +127,6 @@ export const SearchForm: FC = () => {
           </button>
         </div>
       </form>
-      <div className="w-full flex">
-        <div className={`w-1/3`}>
-          <ul className={`${typeFocus ? "visible" : "hidden"}`}>
-            <li>test</li>
-          </ul>
-        </div>
-        <RarityAutocomplete
-          credentials={credentials}
-          setCredentials={setCredentials}
-          rarityFocus={rarityFocus}
-        />
-        <div className="w-1/3"></div>
-      </div>
     </section>
   );
 };
