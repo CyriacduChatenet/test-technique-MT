@@ -27,7 +27,7 @@ export const SearchForm: FC = () => {
   };
 
   const handleTypeDelete = (index: number) => {
-    setTypes((prev) => prev.filter((type: string, i: number) => i !== index));
+    setTypes((prev) => prev.filter((_type: string, i: number) => i !== index));
   };
 
   const handleSubmit = () => {

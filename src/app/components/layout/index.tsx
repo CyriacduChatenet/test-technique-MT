@@ -1,9 +1,9 @@
-import { FC, PropsWithChildren } from "react";
+import { PropsWithChildren } from "react";
 
 import { Navbar } from "../navbar";
 import { Footer } from "../footer";
 
-export const Layout: FC = ({ children }: PropsWithChildren) => {
+export const Layout = ({ children }: PropsWithChildren) => {
   return (
     <div>
       <header>

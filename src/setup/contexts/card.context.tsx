@@ -1,4 +1,4 @@
-import { Dispatch, FC, PropsWithChildren, SetStateAction, createContext, useContext, useEffect, useState } from "react";
+import { Dispatch, PropsWithChildren, SetStateAction, createContext, useContext, useEffect, useState } from "react";
 
 import { Card } from "../types/card.type";
 import { ApiService } from "../services/api.service";
@@ -17,7 +17,7 @@ const CardContext = createContext<Context>({
     types: [],
 });
 
-export const CardProvider: FC = ({ children }: PropsWithChildren) => {
+export const CardProvider = ({ children }: PropsWithChildren) => {
     const [data, setData] = useState<Card[]>([]);
     const [filteredData, setFilteredData] = useState<Card[]>([]);
     const [types, setTypes] = useState<string[]>([]);
