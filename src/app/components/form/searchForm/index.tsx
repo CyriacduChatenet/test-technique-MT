@@ -1,4 +1,5 @@
 import { ChangeEvent, FC, useEffect, useState } from "react";
+import { Icon } from "@iconify/react";
 
 import { useCard } from "../../../../setup/contexts/card.context";
 import { Card } from "../../../../setup/types/card.type";
@@ -25,6 +26,10 @@ export const SearchForm: FC = () => {
     });
   };
 
+  const handleTypeDelete = (index: number) => {
+    setTypes((prev) => prev.filter((type: string, i: number) => i !== index));
+  };
+
   const handleSubmit = () => {
     console.log(credentials);
     if (
@@ -45,11 +50,13 @@ export const SearchForm: FC = () => {
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      setTypes((prev) => [...prev, credentials.type]);
-      setCredentials((prev) => ({
-        ...prev,
-        type: "",
-      }));
+      if (credentials.type.length > 0) {
+        setTypes((prev) => [...prev, credentials.type]);
+        setCredentials((prev) => ({
+          ...prev,
+          type: "",
+        }));
+      }
     }, 3000);
 
     return () => clearTimeout(timeout);
@@ -57,16 +64,28 @@ export const SearchForm: FC = () => {
 
   return (
     <section>
-      <div className="w-full">
+      <div className="w-full my-4">
         <ul className="w-1/3 flex justify-between items-center">
           {types.map((type: string, index: number) => (
-            <li key={index}>{type}</li>
+            <li
+              key={index}
+              className="rounded-full py-2 px-4 bg-gray-100 flex justify-between items-center"
+            >
+              <span>{type}</span>
+              <button className="ml-4" onClick={() => handleTypeDelete(index)}>
+                <Icon icon="material-symbols:close" />
+              </button>
+            </li>
           ))}
         </ul>
       </div>
       <form>
         <div className="flex items-center py-2">
-          <div className="w-1/3" onMouseEnter={() => setTypeFocus(true)} onMouseLeave={() => setTypeFocus(false)}>
+          <div
+            className="w-1/3"
+            onMouseEnter={() => setTypeFocus(true)}
+            onMouseLeave={() => setTypeFocus(false)}
+          >
             <label htmlFor="" className="font-bold">
               Type
             </label>
@@ -85,7 +104,11 @@ export const SearchForm: FC = () => {
               setCredentials={setCredentials}
             />
           </div>
-          <div className="w-1/3" onMouseEnter={() => setRarityFocus(true)} onMouseLeave={() => setRarityFocus(false)}>
+          <div
+            className="w-1/3"
+            onMouseEnter={() => setRarityFocus(true)}
+            onMouseLeave={() => setRarityFocus(false)}
+          >
             <label htmlFor="" className="font-bold">
               Rarity
             </label>
