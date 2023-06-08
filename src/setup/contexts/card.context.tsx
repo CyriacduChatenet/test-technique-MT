@@ -7,23 +7,27 @@ type Context = {
     data: Card[];
     filteredData: Card[];
     setFilteredData: Dispatch<SetStateAction<Card[]>>
+    types: string[];
 };
 
 const CardContext = createContext<Context>({
     data: [],
     filteredData: [],
     setFilteredData: () => {},
+    types: [],
 });
 
 export const CardProvider: FC = ({ children }: PropsWithChildren) => {
     const [data, setData] = useState<Card[]>([]);
     const [filteredData, setFilteredData] = useState<Card[]>([]);
+    const [types, setTypes] = useState<string[]>([]);
 
     const handleFetch = async () => {
         const response = await ApiService.getCard();
         setData(response);
         setFilteredData(response);
-        console.log(response);
+        const uniqueTypes = [...new Set(response.map((card) => card.type))];
+        setTypes(uniqueTypes);
       };
     
       useEffect(() => {
@@ -31,7 +35,7 @@ export const CardProvider: FC = ({ children }: PropsWithChildren) => {
       }, []);
 
 
-  return <CardContext.Provider value={{data, filteredData, setFilteredData}}>{children}</CardContext.Provider>;
+  return <CardContext.Provider value={{data, filteredData, setFilteredData, types}}>{children}</CardContext.Provider>;
 };
 
 export const useCard = () => useContext<Context>(CardContext);
